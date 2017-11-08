@@ -51,9 +51,9 @@ namespace questrade_ipo
                 return;
             }
 
-            // var json = await _httpClient.GetStringAsync("http://www.questrade.com/Sitefinity/Public/Services/Questrade/Services/IPOService.svc/GetIPOList");
+            var json = await _httpClient.GetStringAsync("http://www.questrade.com/Sitefinity/Public/Services/Questrade/Services/IPOService.svc/GetIPOList");
             // await File.WriteAllTextAsync("/Users/node/Desktop/ipos.json", json);
-            var json = await File.ReadAllTextAsync("/Users/node/Desktop/ipos.json");
+            // var json = await File.ReadAllTextAsync("/Users/node/Desktop/ipos.json");
             
             var ipoList = JsonConvert.DeserializeObject<IEnumerable<IpoListItem>>(json);
             var ipos = ipoList.Where(i => i.Category == "Equity" && i.Status == "Closed")
@@ -63,10 +63,9 @@ namespace questrade_ipo
             for (var i = 0; i < ipos.Count; i++)
             {
                 var ipo = ipos[i];
-                // var ipoJson = await _httpClient.GetStringAsync($"http://www.questrade.com/Sitefinity/Public/Services/Questrade/Services/IPOService.svc/GetIPODetails/{ipo.IpoURL}/");
+                var ipoJson = await _httpClient.GetStringAsync($"http://www.questrade.com/Sitefinity/Public/Services/Questrade/Services/IPOService.svc/GetIPODetails/{ipo.IpoURL}/");
                 // await File.WriteAllTextAsync($"/Users/node/Desktop/ipos/{ipo.IpoURL}.json", ipoJson);
-                // Console.WriteLine($"{i}/{ipos.Count - 1} ({ipo.IpoURL})");
-                var ipoJson = await File.ReadAllTextAsync($"/Users/node/Desktop/ipos/{ipo.IpoURL}.json");
+                // var ipoJson = await File.ReadAllTextAsync($"/Users/node/Desktop/ipos/{ipo.IpoURL}.json");
                 var ipoItem = JsonConvert.DeserializeObject<Ipo>(ipoJson);
 
                 var regex = new Regex("under the symbol “(.*)”.", RegexOptions.IgnoreCase);
